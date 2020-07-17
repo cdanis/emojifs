@@ -58,7 +58,7 @@ The default location for the configuration file is `~/.emojifs.toml`
 
 ```toml
 [emojifs]
-mountpoint = ~/emoji
+mountpoint = '~/emoji'
 
 [slack]
 cookies = ['d=wpwQ4182w08qxmE4YP0gvlMb2L...']
@@ -70,7 +70,7 @@ That's all you need.  All Slacks you logged into will be autodetected.
 There are a few niceties available:
 ```toml
 [emojifs]
-mountpoint = /emoji  # if you want to feel extra cool
+mountpoint = '/emoji'  # if you want to feel extra cool
 foreground = true
 
 [slack]
