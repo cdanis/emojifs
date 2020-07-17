@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "emojifs"
+version = "0.1.0"
+description = "A FUSE filesystem to manipulate custom emojis on your various Slacks and Discords"
+authors = ["Chris Danis <cdanis@gmail.com>"]
+license = "GPL-3.0-only"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: No Input/Output (Daemon)",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Topic :: Communications",
+    "Topic :: System :: Filesystems",
+]
+keywords = ["fuse", "slack", "discord", "emoji"]
+include = [
+    "LICENSE",
+]
+readme = "README.md"
+homepage = "https://github.com/cdanis/emojifs"
+repository = "https://github.com/cdanis/emojifs"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2"
+# Why is the state of FUSE wrappers for Python so regrettable?
+# There's three and a half different options and they're all somehow bad.
+refuse = "^0"
+cachetools = "^4"
+tomlkit = "^0.6.0"
+logzero = "^1.5.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+bpython = ""
+flake8 = ""
+dephell = "^0.8.3"
+
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[tool.poetry.scripts]
+emojifs = 'emojifs.__main__:main'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
