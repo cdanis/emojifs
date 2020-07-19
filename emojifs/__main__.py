@@ -77,7 +77,8 @@ def main():
                    'overrides mountpoint from config.')
     p.add_argument('-f', '--foreground', help='If set, stay in the foreground.', default=False)
     p.add_argument('-c', '--config', help='Path to your config file with secrets',
-                   default=os.path.expanduser("~/.emojifs.toml"), type=argparse.FileType('r'))
+                   default=os.path.join(os.path.expanduser("~"), ".emojifs.toml"),
+                   type=argparse.FileType('r'))
     p.add_argument('-v', '--verbose', action='count', default=0,
                    help='Verbosity (-v, -vv, etc).  Higher verbosities will log all HTTP traffic '
                         '(NB: at higher levels, this will log your auth secrets!)')

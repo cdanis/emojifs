@@ -66,6 +66,12 @@ cookies = ['d=wpwQ4182w08qxmE4YP0gvlMb2L...']
 
 That's all you need.  All Slacks you logged into will be autodetected.
 
+On Windows, your mountpoint should be a drive letter:
+```toml
+[emojifs]
+mountpoint = 'E:'
+```
+
 ### A comprehensive configuration
 There are a few niceties available:
 ```toml

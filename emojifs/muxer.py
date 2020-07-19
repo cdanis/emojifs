@@ -26,6 +26,8 @@ import stat
 import refuse.high as fuse
 from logzero import logger
 
+import emojifs.utils as utils
+
 
 class Muxer(fuse.LoggingMixIn, fuse.Operations):
     def __init__(self, map):
@@ -80,8 +82,8 @@ class Muxer(fuse.LoggingMixIn, fuse.Operations):
             return dict(
                 st_mode=stat.S_IFDIR | 0o555,
                 st_nlink=2,
-                st_uid=os.getuid(),
-                st_gid=os.getgid(),
+                st_uid=utils.getuid(),
+                st_gid=utils.getgid(),
             )
         # Delegate to mountpoints their / and below.
         try:

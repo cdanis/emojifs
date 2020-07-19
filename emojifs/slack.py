@@ -223,8 +223,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
                 st_ctime=min([e['created'] for e in emojis.values()]),
                 st_atime=time.time(),
                 st_nlink=2,
-                st_uid=os.getuid(),
-                st_gid=os.getgid(),
+                st_uid=emojifs.utils.getuid(),
+                st_gid=emojifs.utils.getgid(),
             )
 
         if path in self._write_buffers:
@@ -234,8 +234,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
                 st_ctime=time.time(),
                 st_mtime=time.time(),
                 st_nlink=1,
-                st_uid=os.getuid(),
-                st_gid=os.getgid(),
+                st_uid=emojifs.utils.getuid(),
+                st_gid=emojifs.utils.getgid(),
                 st_size=len(self._write_buffers[path].getbuffer())
             )
 
@@ -251,8 +251,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
             st_ctime=e['created'],
             st_atime=time.time(),
             st_nlink=1,
-            st_uid=os.getuid(),
-            st_gid=os.getgid(),
+            st_uid=emojifs.utils.getuid(),
+            st_gid=emojifs.utils.getgid(),
             st_size=(self._get_content_length(e['url']) if self._real_sizes else 256*1024),
         )
 
