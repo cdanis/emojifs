@@ -145,6 +145,9 @@ def main():
         # TODO discord
         pass
 
+    if not muxer_map:
+        logger.warn("We didn't discover any Slacks or Discords to use. "
+                    "Check your configuration file for errors?")
     mux = Muxer(muxer_map)
 
     foreground = args.foreground or _get(config, ['emojifs', 'foreground'], default=False)
