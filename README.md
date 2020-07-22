@@ -1,9 +1,24 @@
 # emojifs
 
+![yes! but no! but also, yes.](extras/ablobcouncil.gif)
+
 ## Introduction
 `emojifs` is a FUSE filesystem that allows you to manipulate custom emojis on your various Slacks and Discords*.
 
 *: Discord is coming soon; sorry.
+
+## Example usage applications
+
+    # Copy one emote from Slack to Discord.
+    cp /emoji/slack/xooglers/docker-fire.gif /emoji/discord/unchaind/
+
+    # Upload a whole pile of emoji.
+    cp ~/emojipacks/parrots/* /emoji/slack/mynewslack/
+
+    # Grab all those blobmoji across all my Discords and put them on Slack.
+    cp /emoji/discord/*/*blob* /emoji/slack/myslack/
+
+<!-- TODO xattr? -->
 
 ## ⚠️ WARNING! ⚠️
 **☢️ 😱 DO NOT USE THIS PROGRAM. 😱 ☢️**  
@@ -24,7 +39,8 @@ and you are welcome to redistribute it under certain conditions).
 ## Getting your Slack and Discord secrets
 
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
-Don't share your cookies with anyone or anything, including this program.  They allow full control of your account.  
+Don't share your cookies with anyone or anything, including this program.  
+They allow full control of your account!  
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
 
 For Slack, the easiest thing to do is:
@@ -47,6 +63,8 @@ Discord is coming soon (but will be similar).
 Like most Python packages, just `pip install emojifs`, or you can `git clone` the repo and `python setup.py install`.
 
 Probably want to do either of the above inside a venv.
+
+If you have [`poetry`](https://python-poetry.org/) installed, then `poetry install` will work great.
 
 ## Writing a config file
 
@@ -96,7 +114,7 @@ thisisaverylongname = 'short'
 ```
 
 This will:
-* mount everything under /emoji
+* mount everything under `/emoji`
 * keep emojifs in the foreground as it runs (necessary if you want verbose logging output)
 * first read the auth tokens one by one, then scrape logins for the cookies listed
 * instead of mounting `thisisaverylongname.slack.com`'s emojis under the usual path, they'll appear under `/emoji/slack/short`.
@@ -125,18 +143,8 @@ optional arguments:
 ```
 
 
-## Example usage applications
-
-    cp /emoji/slack/xooglers/docker-fire.gif /emoji/discord/unchaind/
-
-    cp ~/emojipacks/parrots/* /emoji/slack/mynewslack/
-
-    cp /emoji/discord/*/*blob* /emoji/slack/myslack/
-
-<!-- TODO xattr? -->
-
 ## A note on semantics
-Emojis are always 'rendered' in the filesystem with extensions (`.png`, `.gif`, etc) attached; however, the filesystem will accept reads and writes to filenames without extensions (assuming, of course, they are valid emoji names).
+Emojis are always 'rendered' in the filesystem with extensions (`.png`, `.gif`, etc) attached; however, the filesystem will accept reads and writes to filenames without extensions (assuming, of course, the filenames are valid emoji names).
 
 ## Known issues
 * The first time you `ls` a directory for a Slack, it will take a very long time: possibly dozens of seconds 😬 but will be much faster afterwards.  Sorry, there are hopefully some reasonable ways to fix this.  (If you're morbidly curious, look for `real_sizes` in `emojifs/slack.py`.)
