@@ -1,6 +1,6 @@
-# emojifs
+<img align="right" src="extras/ablobcouncil.gif" alt="yes! but no! but also, yes.">
 
-![yes! but no! but also, yes.](extras/ablobcouncil.gif)
+# emojifs
 
 ## Introduction
 `emojifs` is a FUSE filesystem that allows you to manipulate custom emojis on your various Slacks and Discords*.
