@@ -1,4 +1,7 @@
-<img align="right" src="extras/ablobcouncil.gif" alt="yes! but no! but also, yes.">
+<img align="right"
+  src="extras/ablobcouncil.gif"
+  title="yes! but no! but also, yes."
+  alt="the emojifs mascot: a blobmoji holding a 'yes' sign as well as a 'no' sign and emphatically waving both simultaneously">
 
 # emojifs
 
