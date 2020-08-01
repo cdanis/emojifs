@@ -336,8 +336,11 @@ def enumerate_tokens(cookie: str):
         r = sess.get("https://emojifs-wasteland.slack.com")
         r.raise_for_status()
         ALREADY_SIGNED_IN_TEAM_REGEX = r"(https://[a-zA-Z0-9\-]+\.slack\.com)"
+        QUOTED_ALREADY_SIGNED_IN_TEAM_REGEX = r"&quot;url&quot;:&quot;(https:\\/\\/[a-zA-Z0-9\-]+\.slack\.com)"
         SLACK_API_TOKEN_REGEX = r"\"api_token\":\"(xox[a-zA-Z]-[a-zA-Z0-9-]+)\""
         teams = (set(re.findall(ALREADY_SIGNED_IN_TEAM_REGEX, r.text))
+                 | set(t.replace('\\', '')
+                       for t in re.findall(QUOTED_ALREADY_SIGNED_IN_TEAM_REGEX, r.text))
                  - set(['https://status.slack.com', 'https://api.slack.com']))
         for team in teams:
             try:
