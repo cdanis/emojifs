@@ -6,9 +6,8 @@
 # emojifs
 
 ## Introduction
-`emojifs` is a FUSE filesystem that allows you to manipulate custom emojis on your various Slacks and Discords*.
+`emojifs` is a FUSE filesystem that allows you to manipulate custom emojis on your various Slacks and Discords.
 
-*: Discord is coming soon; sorry.
 
 ## Example usage applications
 
@@ -64,7 +63,8 @@ For Slack, the easiest thing to do is:
   title="monkaTOS"
   alt="Pepe the Frog, sweating, his eyes replaced with a blinking marquee reading TOS">
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
-Using this program with Discord violates their [Terms of Service](https://support.discord.com/hc/en-us/articles/115002192352).  It is possible your account could be banned.  
+Using this program with Discord violates their [Terms of Service](https://support.discord.com/hc/en-us/articles/115002192352).  
+It is possible your account could be banned.  
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
 
 &nbsp;  
