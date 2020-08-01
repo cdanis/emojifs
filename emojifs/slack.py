@@ -90,6 +90,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     def _request(self, method, url, **kwargs):
         """Execute a request against our _session, respecting ratelimiting and raising if
         the response isn't okay.  Retry on ratelimiting (after sleeping) but not on other error."""
+        # TODO: this is very close to, but not quite, Discord._request().
+
         # Respect any ratelimiting on the given URL path
         time.sleep(max(0, self._retry_after.get(url, 0) - time.time()))
         resp = self._session.request(method, url, **kwargs)

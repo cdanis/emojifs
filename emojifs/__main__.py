@@ -52,7 +52,7 @@ import emojifs
 import emojifs.slack
 from emojifs.muxer import Muxer
 from emojifs.slack import Slack
-
+from emojifs.discord import Discord
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter,
                       argparse.RawDescriptionHelpFormatter):
@@ -141,9 +141,19 @@ def main():
         muxer_map = {f"/slack/{our_name}": s for (our_name, s) in slacks.items()}
 
     if 'discord' in config:
-        logger.warning("Sorry, Discord is not yet supported 😞")
-        # TODO discord
-        pass
+        ack = _get(config, ['discord', 'acknowledged'])
+        token = _get(config, ['discord', 'token'])
+        if token:
+            ACKSPECTED = "I understand that using this program violates Discord's ToS"
+            if ack != ACKSPECTED:
+                logger.error("⚠️  Using this program violates Discord's Terms of Service and could"
+                             " potentially result in your account being banned.  For details, see "
+                             "https://support.discord.com/hc/en-us/articles/115002192352  "
+                             "If you accept the risk, add this to your config under [discord]:"
+                             "\nacknowledged = \"%s\"", ACKSPECTED)
+                logger.error("Not mounting /discord as you didn't acknowledge the risk.")
+            else:
+                muxer_map['/discord'] = Discord(token)
 
     if not muxer_map:
         logger.warn("We didn't discover any Slacks or Discords to use. "

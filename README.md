@@ -42,17 +42,32 @@ and you are welcome to redistribute it under certain conditions).
 ## Getting your Slack and Discord secrets
 
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
-Don't share your cookies with anyone or anything, including this program.  
+Don't share your cookies or tokens with anyone or anything, including this program.  
 They allow full control of your account!  
 **⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
 
+### Slack
 For Slack, the easiest thing to do is:
 * In your web browser, log in to all the Slacks you want to use with this hunk of junk.
 * Open your browser devtools network panel
 * Find a request going towards edgeapi.slack.com or api.slack.com or a URL path starting with /api.  In Chrome, you can just type `api` in the Filter box above the timeline.
 * Extract the cookie header value from your request, and use it in the config file below.
 
-Discord is coming soon (but will be similar).
+### Discord
+* In your web browser, go to https://discord.com/app
+* Open your browser devtools network panel
+* Find a request going towards `https://discord.com/api/v6`.  In Chrome, you can just type `api` in the Filter box above the timeline.
+* Extract the value of the `authorization:` header from one of your requests, and use it in the config file below.
+
+<img align="left"
+  src="https://cdn.discordapp.com/emojis/739162266284458045.gif"
+  title="monkaTOS"
+  alt="Pepe the Frog, sweating, his eyes replaced with a blinking marquee reading TOS">
+**⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
+Using this program with Discord violates their [Terms of Service](https://support.discord.com/hc/en-us/articles/115002192352).  It is possible your account could be banned.  
+**⚠️ SERIOUS WARNING! I MEAN IT! ⚠️**  
+
+&nbsp;  
 
 ## Requirements
 * Python 3.7+
@@ -65,7 +80,7 @@ Discord is coming soon (but will be similar).
 
 Like most Python packages, just `pip install emojifs`, or you can `git clone` the repo and `python setup.py install`.
 
-Probably want to do either of the above inside a venv.
+You probably want to do either of the above inside a venv.
 
 If you have [`poetry`](https://python-poetry.org/) installed, then `poetry install` will work great.
 
@@ -83,6 +98,10 @@ mountpoint = '~/emoji'
 
 [slack]
 cookies = ['d=wpwQ4182w08qxmE4YP0gvlMb2L...']
+
+[discord]
+token = 'mfa.x91xxxxx......'
+acknowledged = "I understand that using this program violates Discord's ToS"
 ```
 
 That's all you need.  All Slacks you logged into will be autodetected.
@@ -150,13 +169,14 @@ optional arguments:
 Emojis are always 'rendered' in the filesystem with extensions (`.png`, `.gif`, etc) attached; however, the filesystem will accept reads and writes to filenames without extensions (assuming, of course, the filenames are valid emoji names).
 
 ## Known issues
-* The first time you `ls` a directory for a Slack, it will take a very long time: possibly dozens of seconds 😬 but will be much faster afterwards.  Sorry, there are hopefully some reasonable ways to fix this.  (If you're morbidly curious, look for `real_sizes` in `emojifs/slack.py`.)
+* The first time you `ls` a directory for a Slack or Discord, it will take a very long time: possibly dozens of seconds 😬 but will be much faster afterwards.  Sorry, there are hopefully some reasonable ways to fix this.  (If you're morbidly curious, look for `real_sizes` in `emojifs/slack.py`.)
 * While deletions and creations are supported, overwriting emojis in place is *not* yet supported.  As a workaround, you can use `cp --remove-destination` which, before writing new versions, will delete any existent emojis.
 * Some Slacks have emojis from long ago which are aliases to emojis that don't themselves appear in the emoji listing -- although there isn't actually data missing, as they have a `data:` URL.
+* The use of this program with Discord violates their Terms of Service.
 * The existence of this program is an unforgivable sin.
 
 ## Future work
-* Discord support.
+* Aliases for Discord guild names, as they can be unwieldly from the CLI.
 * EaaFS: Integrating popular emojipacks as a filesystem.
 
 ## Acknowledgements
