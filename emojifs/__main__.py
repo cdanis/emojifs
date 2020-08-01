@@ -161,5 +161,9 @@ def main():
         logger.error('😖 Something went wrong in FUSE setup', exc_info=True)
 
 
+# TODO: signal handler (USR1?) to invalidate the TTL caches of all things
+
+# TODO: SIGHUP to re-load config and adjust as necessary?
+
 if __name__ == '__main__':
     main()
