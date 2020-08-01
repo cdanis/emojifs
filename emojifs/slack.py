@@ -264,6 +264,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     # Time for the scary stuff: Mutating operations!
 
     def unlink(self, path):
+        # TODO: what about an unlink on a new file open in _write_buffers ?
         emojis = self._get_all_emoji()
         name = self._path_to_name(path)
         if name not in emojis:
@@ -280,7 +281,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     def write(self, path, data, offset, fh):
         b = self._write_buffers[path]
         b.seek(offset)
-        return self._write_buffers[path].write(data)
+        return b.write(data)
 
     # This is where the write() magic actually happens.  We need to make a single POST call, with
     # a valid and complete image file, so it's the only place where it really can.
