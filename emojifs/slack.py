@@ -40,7 +40,7 @@ import refuse.high as fuse
 import requests
 from logzero import logger
 
-import emojifs.utils
+import emojifs.utils as utils
 
 
 class Slack(fuse.LoggingMixIn, fuse.Operations):
@@ -62,11 +62,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         self._write_buffers = {}  # path (not name!) -> BytesIO
         self.__cached_metadata = cachetools.TTLCache(maxsize=1, ttl=600)  # for _get_all_emoji()
 
-        self._unauthed_session = requests.Session()
-        emojifs.utils.set_user_agent(self._unauthed_session.headers)
-
         self._session = requests.Session()
-        emojifs.utils.set_user_agent(self._session.headers)
+        utils.set_user_agent(self._session.headers)
         self._session.headers['Authorization'] = f"Bearer {token}"
 
         # Our token should be usable for a single Slack.
@@ -181,34 +178,6 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
             logger.debug('mapped %s to file %s (data:image/ URL)', e['url'], real_name, rv)
             return rv
 
-    @cachetools.cached(cachetools.LRUCache(maxsize=100))
-    def _get_emoji_bytes(self, url: str) -> bytes:
-        """Returns the bytes for a given emoji URL.  Handles HTTP(S) and data URLs."""
-        if url.startswith('http'):
-            r = self._unauthed_session.get(url)
-            r.raise_for_status()
-            return r.content
-        elif url.startswith('data:'):
-            (prefix, data) = url.split(',', maxsplit=1)
-            if not prefix.endswith('base64'):
-                raise ValueError
-            return base64.b64decode(data)
-
-    @cachetools.cached(cachetools.LRUCache(maxsize=10000))
-    def _get_content_length(self, url: str) -> int:
-        """Returns the size of an emoji.  Handles HTTP(S) and data URLs."""
-        if url.startswith('http'):
-            r = self._unauthed_session.head(url)
-            r.raise_for_status()
-            # Slack emojis are served over CloudFront which provides Content-Length.
-            return int(r.headers['Content-Length'])
-        elif url.startswith('data:'):
-            (prefix, data) = url.split(',', maxsplit=1)
-            if not prefix.endswith('base64'):
-                raise ValueError
-            padding = data[-2:].count('=')
-            return int(3*len(data)/4 - padding)
-
     # Now, the main course: FUSE operations implementations.
 
     def getattr(self, path, fh):
@@ -223,8 +192,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
                 st_ctime=min([e['created'] for e in emojis.values()]),
                 st_atime=time.time(),
                 st_nlink=2,
-                st_uid=emojifs.utils.getuid(),
-                st_gid=emojifs.utils.getgid(),
+                st_uid=utils.getuid(),
+                st_gid=utils.getgid(),
             )
 
         if path in self._write_buffers:
@@ -234,8 +203,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
                 st_ctime=time.time(),
                 st_mtime=time.time(),
                 st_nlink=1,
-                st_uid=emojifs.utils.getuid(),
-                st_gid=emojifs.utils.getgid(),
+                st_uid=utils.getuid(),
+                st_gid=utils.getgid(),
                 st_size=len(self._write_buffers[path].getbuffer())
             )
 
@@ -251,9 +220,9 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
             st_ctime=e['created'],
             st_atime=time.time(),
             st_nlink=1,
-            st_uid=emojifs.utils.getuid(),
-            st_gid=emojifs.utils.getgid(),
-            st_size=(self._get_content_length(e['url']) if self._real_sizes else 256*1024),
+            st_uid=utils.getuid(),
+            st_gid=utils.getgid(),
+            st_size=(utils.get_content_length(e['url']) if self._real_sizes else 256*1024),
         )
 
     def readdir(self, path, fh=None):
@@ -285,7 +254,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         if name not in emojis:
             raise fuse.FuseOSError(errno.ENOENT)
         e = emojis[name]
-        b = self._get_emoji_bytes(e['url'])
+        b = utils.get_emoji_bytes(e['url'])
         return b[offset:offset+size]
 
     # TODO: override open() s.t. we don't allow non-create write modes.
@@ -361,7 +330,7 @@ def enumerate_tokens(cookie: str):
         sess = requests.Session()
         # a 'real' cookie jar was too annoying to figure out and seemed of dubious benefit anyway
         sess.headers['cookie'] = f"d={cookies['d']}"
-        emojifs.utils.set_user_agent(sess.headers)
+        utils.set_user_agent(sess.headers)
         # This Slack exists, but no one has access to it.
         # So, Slack helpfully lists all your logged-in teams.
         r = sess.get("https://emojifs-wasteland.slack.com")
