@@ -23,15 +23,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import base64
 import errno
+import http.cookies
 import io
 import logging
-import os
 import re
 import stat
 import time
-import http.cookies
 import urllib.parse
 from collections import defaultdict
 
