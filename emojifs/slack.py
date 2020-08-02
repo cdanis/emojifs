@@ -124,7 +124,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     def _upload_emoji(self, name: str, file):
         """Upload an emoji to Slack.  file should be a file-like object (e.g. BytesIO)"""
         # The official API endpoint admin.emoji.add is *only for Enterprise*.  Sigh.
-        logger.info('Creating :%s: on %s', name, self.name)
+        logger.info('📸 Creating :%s: on %s', name, self.name)
         try:
             self._request('POST', self._url('emoji.add'),
                           data={'mode': 'data', 'name': name},
@@ -134,7 +134,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
 
     def _delete_emoji(self, name: str):
         """Delete the named emoji from Slack."""
-        logger.info('Deleting :%s: from %s', name, self.name)
+        logger.info('🗑️ Deleting :%s: from %s', name, self.name)
         try:
             self._request('POST', self._url('emoji.remove'), data={'name': name})
         finally:
@@ -142,7 +142,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
 
     def _alias_emoji(self, src: str, dst: str):
         """Create an alias so that you can use :dst: as another name for :src:."""
-        logger.info('Creating alias :%s: to original :%s: on %s', src, dst, self.name)
+        logger.info('🔗 Creating alias :%s: to original :%s: on %s', src, dst, self.name)
         try:
             self._request('POST', self._url('emoji.add'),
                           data={'mode': 'alias', 'name': dst, 'alias_for': src})

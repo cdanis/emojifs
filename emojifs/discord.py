@@ -248,7 +248,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
         # TODO: what about an unlink on a new file open in _write_buffers ?
         (g, e) = self._path_to_guildmoji(path)
         if g and e:
-            logger.info('Deleting :%s: (id %s) from "%s" (id %s)',
+            logger.info('🗑️ Deleting :%s: (id %s) from "%s" (id %s)',
                         e['name'], e['id'], g['name'], g['id'])
             self._request('DELETE', f"guilds/{g['id']}/emojis/{e['id']}")
             self._invalidate_guild(g['id'])
@@ -299,7 +299,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
                     image=(f"data:image/{image_mime};base64,"
                            + base64.b64encode(b.getvalue()).decode('ascii'))
                 )
-                logger.info('Creating :%s: on "%s" (id %s)', eh, g['name'], g['id'])
+                logger.info('📸 Creating :%s: on "%s" (id %s)', eh, g['name'], g['id'])
                 self._request('POST', f"guilds/{g['id']}/emojis", json=payload)
             finally:
                 b.close()
