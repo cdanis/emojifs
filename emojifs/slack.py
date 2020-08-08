@@ -100,8 +100,11 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
             return self._request(method, url, **kwargs)
         else:
             resp.raise_for_status()
-        logger.debug('resp for %s to %s json: %s', method, url, resp.json())
-        assert(resp.json()['ok'])
+        j = resp.json()
+        logger.debug('resp for %s to %s json: %s', method, url, j)
+        if not j['ok']:
+            logger.error('Got an error on %s to %s: %s', method, url, j['error'])
+        assert(j['ok'])
         return resp
 
     def _request_all_pages(self, method, url, *, _paged_key: str, **kwargs):
