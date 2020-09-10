@@ -267,6 +267,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     CREATEDBY_XATTR_NAME = 'user.created_by'
 
     def listxattr(self, path):
+        if path == '/' or path in self._write_buffers:
+            return []
         emojis = self._get_all_emoji()
         name = self._path_to_name(path)
         if name not in emojis:
@@ -275,6 +277,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         return [self.URL_XATTR_NAME, self.CREATEDBY_XATTR_NAME]
 
     def getxattr(self, path, attrname):
+        if path == '/' or path in self._write_buffers:
+            raise fuse.FuseOSError(errno.ENODATA)
         emojis = self._get_all_emoji()
         name = self._path_to_name(path)
         e = emojis[name]
