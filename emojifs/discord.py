@@ -30,6 +30,7 @@ import refuse.high as fuse
 import requests
 from logzero import logger
 
+import emojifs.constants as constants
 import emojifs.utils as utils
 
 
@@ -230,6 +231,28 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
         if g is not None and e is None:
             rv.extend(self._emoji_filename(e) for e in self._get_emojis(g['id']).values())
         return rv
+
+    def listxattr(self, path):
+        if path == '/' or path in self._write_buffers:
+            return []
+        (g, e) = self._path_to_guildmoji(path)
+        if not g and e:
+            raise fuse.FuseOSError(errno.ENOENT)
+        return [constants.URL_XATTR_NAME, constants.CREATEDBY_XATTR_NAME]
+
+    def getxattr(self, path, attrname):
+        if path == '/' or path in self._write_buffers:
+            raise fuse.FuseOSError(errno.ENODATA)
+        (g, e) = self._path_to_guildmoji(path)
+        if not g and e:
+            raise fuse.FuseOSError(errno.ENOENT)
+        if attrname == constants.URL_XATTR_NAME:
+            return bytes(self._emoji_url(e), 'utf-8')
+        elif attrname == constants.CREATEDBY_XATTR_NAME:
+            u = e['user']
+            return bytes(f"{u['username']}@{u['discriminator']}", 'utf-8')
+        else:
+            raise fuse.FuseOSError(errno.ENODATA)
 
     def read(self, path, size, offset, fh):
         if path in self._write_buffers:
