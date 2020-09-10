@@ -250,7 +250,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
             return bytes(self._emoji_url(e), 'utf-8')
         elif attrname == constants.CREATEDBY_XATTR_NAME:
             u = e['user']
-            return bytes(f"{u['username']}@{u['discriminator']}", 'utf-8')
+            return bytes(f"{u['username']}#{u['discriminator']}", 'utf-8')
         else:
             raise fuse.FuseOSError(errno.ENODATA)
 
