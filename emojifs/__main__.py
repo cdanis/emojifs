@@ -132,7 +132,7 @@ def main():
             _add_slack_from_token(t)
 
         for c in _get(config, ['slack', 'cookies'], default=[]):
-            logger.info('🔑 trying login cookie scrape... 🥠')
+            logger.info('🔑 trying Slack login cookie scrape... 🥠')
             tokens = emojifs.slack.enumerate_tokens(c)
             for t in tokens:
                 _add_slack_from_token(t)
