@@ -92,6 +92,24 @@ class Muxer(fuse.LoggingMixIn, fuse.Operations):
             raise fuse.FuseOSError(errno.ENOENT)
         return getattr(fs, 'getattr')(path, *args, **kwargs)
 
+    def listxattr(self, path, *args, **kwargs):
+        if path in self._intermediates:
+            return []
+        try:
+            (path, fs) = self._map_path(path)
+        except ValueError:
+            raise fuse.FuseOSError(errno.ENOENT)
+        return getattr(fs, 'listxattr')(path, *args, **kwargs)
+
+    def getxattr(self, path, *args, **kwargs):
+        if path in self._intermediates:
+            raise fuse.FuseOSError(errno.ENODATA)
+        try:
+            (path, fs) = self._map_path(path)
+        except ValueError:
+            raise fuse.FuseOSError(errno.ENOENT)
+        return getattr(fs, 'getxattr')(path, *args, **kwargs)
+
     def readdir(self, path, *args, **kwargs):
         # For intermediate paths, synthesize all child intermediates and mountpoints.
         if path in self._intermediates:
