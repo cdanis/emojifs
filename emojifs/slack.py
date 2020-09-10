@@ -39,6 +39,7 @@ import requests
 from logzero import logger
 
 import emojifs.utils as utils
+import emojifs.constants as constants
 
 
 class Slack(fuse.LoggingMixIn, fuse.Operations):
@@ -263,9 +264,6 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         b = utils.get_emoji_bytes(e['url'])
         return b[offset:offset+size]
 
-    URL_XATTR_NAME = 'user.url'
-    CREATEDBY_XATTR_NAME = 'user.created_by'
-
     def listxattr(self, path):
         if path == '/' or path in self._write_buffers:
             return []
@@ -274,7 +272,7 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         if name not in emojis:
             raise fuse.FuseOSError(errno.ENOENT)
 
-        return [self.URL_XATTR_NAME, self.CREATEDBY_XATTR_NAME]
+        return [constants.URL_XATTR_NAME, constants.CREATEDBY_XATTR_NAME]
 
     def getxattr(self, path, attrname):
         if path == '/' or path in self._write_buffers:
@@ -284,9 +282,9 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         e = emojis[name]
         if name not in emojis:
             raise fuse.FuseOSError(errno.ENOENT)
-        if attrname == self.URL_XATTR_NAME:
+        if attrname == constants.URL_XATTR_NAME:
             return bytes(e['url'], 'utf-8')
-        elif attrname == self.CREATEDBY_XATTR_NAME:
+        elif attrname == constants.CREATEDBY_XATTR_NAME:
             return bytes(e['user_display_name'], 'utf-8')
         else:
             raise fuse.FuseOSError(errno.ENODATA)
