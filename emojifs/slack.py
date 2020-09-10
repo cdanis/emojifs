@@ -263,6 +263,30 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         b = utils.get_emoji_bytes(e['url'])
         return b[offset:offset+size]
 
+    URL_XATTR_NAME = 'user.url'
+    CREATEDBY_XATTR_NAME = 'user.created_by'
+
+    def listxattr(self, path):
+        emojis = self._get_all_emoji()
+        name = self._path_to_name(path)
+        if name not in emojis:
+            raise fuse.FuseOSError(errno.ENOENT)
+
+        return [self.URL_XATTR_NAME, self.CREATEDBY_XATTR_NAME]
+
+    def getxattr(self, path, attrname):
+        emojis = self._get_all_emoji()
+        name = self._path_to_name(path)
+        e = emojis[name]
+        if name not in emojis:
+            raise fuse.FuseOSError(errno.ENOENT)
+        if attrname == self.URL_XATTR_NAME:
+            return bytes(e['url'], 'utf-8')
+        elif attrname == self.CREATEDBY_XATTR_NAME:
+            return bytes(e['user_display_name'], 'utf-8')
+        else:
+            raise fuse.FuseOSError(errno.ENODATA)
+
     # TODO: override open() s.t. we don't allow non-create write modes.
     # TODO: eventually consider support re-writes of emoji, even though it's much more
     #       complicated on the client side.
