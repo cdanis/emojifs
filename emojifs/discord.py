@@ -53,8 +53,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
 
         r = self._request('GET', 'users/@me')
         j = r.json()
-        logger.info('👍 Successfully authenticated to Discord as %s#%s', j['username'],
-                    j['discriminator'])
+        logger.info('👍 Successfully authenticated to Discord as %s', self._user_string(j))
 
     def _url(self, method):
         return f"{self._base_url}{method}"
@@ -116,6 +115,9 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
     def _emoji_filename(self, e) -> str:
         extension = 'gif' if e['animated'] else 'png'
         return f"{e['name']}.{extension}"
+
+    def _user_string(self, u) -> str:
+        return f"{u['username']}#{u['discriminator']}"
 
     # TODO: support aliases for guilds, with the alias becoming the 'primary' render if present
 
@@ -251,8 +253,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
         if attrname == constants.URL_XATTR_NAME:
             return bytes(self._emoji_url(e), 'utf-8')
         elif attrname == constants.CREATEDBY_XATTR_NAME:
-            u = e['user']
-            return bytes(f"{u['username']}#{u['discriminator']}", 'utf-8')
+            return bytes(self._user_string(e['user']), 'utf-8')
         else:
             raise fuse.FuseOSError(errno.ENODATA)
 
