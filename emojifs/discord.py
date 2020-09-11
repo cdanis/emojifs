@@ -95,7 +95,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
         j = self._request('GET', 'users/@me/guilds').json()
         return {g['id']: g for g in j}
 
-    # NB: If you change the signature of this function, you must also update _invalidate_guild!
+    # ⚠ If you change the signature of this function, you must also update _invalidate_guild!
     @cachetools.cachedmethod(operator.attrgetter('_emojis_cache'))
     def _get_emojis(self, id: str):
         '''Returns all the emoji for a given guild.'''
@@ -104,6 +104,7 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
 
     def _invalidate_guild(self, id: str):
         '''Clear the cache of a given guild.'''
+        # ⚠ The arguments given to hashkey() must be exactly the signature of _get_emojis().
         k = cachetools.keys.hashkey(id)
         if k in self._emojis_cache:
             del self._emojis_cache[k]
