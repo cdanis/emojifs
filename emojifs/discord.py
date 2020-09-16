@@ -105,7 +105,9 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
 
     def _invalidate_guild(self, id: str):
         '''Clear the cache of a given guild.'''
-        del self._emojis_cache[cachetools.keys.hashkey(id)]
+        k = cachetools.keys.hashkey(id)
+        if k in self._emojis_cache:
+            del self._emojis_cache[k]
 
     def _emoji_url(self, e):
         extension = 'gif' if e['animated'] else 'png'
