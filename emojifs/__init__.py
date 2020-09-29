@@ -1,4 +1,4 @@
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __author__ = "Chris Danis"
 __email__ = "cdanis@gmail.com"
 __repository__ = "https://github.com/cdanis/emojifs"

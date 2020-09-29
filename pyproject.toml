@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "emojifs"
-version = "0.1.0"
+version = "0.2.0"
 description = "A FUSE filesystem to manipulate custom emojis on your various Slacks and Discords"
 authors = ["Chris Danis <cdanis@gmail.com>"]
 license = "GPL-3.0-only"

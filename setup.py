@@ -24,7 +24,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='emojifs',
-    version='0.1.0',
+    version='0.2.0',
     description='A FUSE filesystem to manipulate custom emojis on your various Slacks and Discords',
     python_requires='==3.*,>=3.7.0',
     project_urls={"homepage": "https://github.com/cdanis/emojifs", "repository": "https://github.com/cdanis/emojifs"},
@@ -38,5 +38,5 @@ setup(
     package_dir={"": "."},
     package_data={},
     install_requires=['cachetools==4.*,>=4.0.0', 'logzero==1.*,>=1.5.0', 'refuse==0.*,>=0.0.0', 'requests==2.*,>=2.0.0', 'tomlkit==0.*,>=0.6.0'],
-    extras_require={"dev": ["bpython", "dephell==0.*,>=0.8.3", "flake8", "pytest==4.*,>=4.6.0"]},
+    extras_require={"dev": ["bpython", "dephell==0.*,>=0.8.3", "flake8", "pytest==4.*,>=4.6.0", "rope==0.*,>=0.17.0"]},
 )
