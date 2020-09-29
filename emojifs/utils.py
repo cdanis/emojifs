@@ -11,7 +11,7 @@ from emojifs import __repository__, __version__
 
 def set_user_agent(x):
     """Sets a reasonable User-Agent. x should be a Request headers-like object."""
-    x['User-Agent'] = f"emojifs/{__version__} ({__repository__}) {x['User-Agent']}"
+    x['User-Agent'] = f"emojifs/{__version__} (An Abomination, like Gecko) ({__repository__}) {x['User-Agent']}"
 
 
 def getuid():
