@@ -90,7 +90,6 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     def __repr__(self):
         return str(self)
 
-
     def _url(self, method):
         return f"{self._base_url}{method}"
 
