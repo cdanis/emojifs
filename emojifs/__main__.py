@@ -54,6 +54,7 @@ from emojifs.muxer import Muxer
 from emojifs.slack import Slack
 from emojifs.discord import Discord
 
+
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter,
                       argparse.RawDescriptionHelpFormatter):
     """Trivially combines RawDescriptionHelpFormatter with ArgumentDefaultsHelpFormatter."""
@@ -66,6 +67,7 @@ def _get(tree, branches, *, default=None):
         return functools.reduce(operator.getitem, branches, tree)
     except KeyError:
         return default
+
 
 def main():
     p = argparse.ArgumentParser(
