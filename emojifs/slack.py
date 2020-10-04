@@ -77,11 +77,19 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
                 self.name = m[1]
         r = self._request('GET', self._url('users.info'), params={'user': self._user_id})
         j = r.json()
+        self._user_json = j['user']
         # TODO: we thought we cared about is_admin, but of course is_admin is sufficient but not
         # necessary to upload emoji.
         self._is_admin = (j['user']['is_admin'] or j['user']['is_owner']
                           or j['user']['is_primary_owner'])
         logger.info('👍 Successfully authenticated to %s as user %s', self.name, j['user']['name'])
+
+    def __str__(self):
+        return f"<emojifs.Slack object for {self._user_json['name']}@{self.name}>"
+
+    def __repr__(self):
+        return str(self)
+
 
     def _url(self, method):
         return f"{self._base_url}{method}"

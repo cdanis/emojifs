@@ -52,8 +52,14 @@ class Discord(fuse.LoggingMixIn, fuse.Operations):
         self._session.headers['Authorization'] = token
 
         r = self._request('GET', 'users/@me')
-        j = r.json()
-        logger.info('👍 Successfully authenticated to Discord as %s', self._user_string(j))
+        self._my_user = r.json()
+        logger.info('👍 Successfully authenticated to Discord as %s', self._user_string(self._my_user))
+
+    def __str__(self):
+        return f"<emojifs.Discord object for '{self._user_string(self._my_user)}'>"
+
+    def __repr__(self):
+        return str(self)
 
     def _url(self, method):
         return f"{self._base_url}{method}"
