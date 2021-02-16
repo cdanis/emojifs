@@ -180,6 +180,11 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
     def _emoji_to_filename(self, e, *, name: str = None) -> str:
         """Convert an emoji API dict to a pseudo-filename, including an extension."""
         real_name = e['name'] if not name else name
+        if e['url'] == None:
+            # doesn't look like anything to me
+            rv = f"{real_name}.bad"
+            logger.debug('mapped %s to file %s', real_name, rv)
+            return rv
         if e['url'].startswith('http'):
             # grab the extension (gif/png) from the end of the URL
             rv = f"{real_name}.{e['url'].rsplit('.', maxsplit=1)[-1]}"
