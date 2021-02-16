@@ -112,6 +112,8 @@ class Slack(fuse.LoggingMixIn, fuse.Operations):
         logger.debug('resp for %s to %s json: %s', method, url, j)
         if not j['ok']:
             logger.error('Got an error on %s to %s: %s', method, url, j['error'])
+            if j['error'] == 'no_permission':
+                raise fuse.FuseOSError(errno.EPERM)
         assert(j['ok'])
         return resp
 
